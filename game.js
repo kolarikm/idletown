@@ -2,6 +2,8 @@ const SPEED = 1000;
 
 var gameTime = 1;
 
+var blurTime = 0;
+
 var gameData = {
     bux: 0,
     peeps: 0,
@@ -13,6 +15,10 @@ var gameTimer = setInterval(() => {
     tick();
     updateDisplay();
 }, SPEED);
+
+function fastForward(deltaTime) {
+    var missedTicks = (Math.round(deltaTime/1000)*1000)/1000;
+}
 
 function tick() {
     if (gameData.houses > 0) {
@@ -40,18 +46,15 @@ function addHouse() {
     }
 }
 
-/**
- * For later
- * User this to calculate delta time between tab cycling
-    var gameActive;
+var gameActive;
     
-    window.onfocus = function () {
-        gameActive = true;
-        // Calculate delta, then perform update
-    };
-        
-    window.onblur = function () {
-        gameActive = false;
-        // Save off current time
-    };
- */
+window.onfocus = function () {
+    gameActive = true;
+    var deltaTime = new Date().getTime() - blurTime;
+    fastForward(deltaTime);
+};
+
+window.onblur = function () {
+    gameActive = false;
+    blurTime = new Date().getTime();
+};
